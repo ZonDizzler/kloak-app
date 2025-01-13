@@ -50,25 +50,9 @@ function initializeKloak() {
   for (let index = 0; index < 25; index++) {
     const square = gameBoard.children[index];
 
-
     // Place Kloaks on the first and last two rows
     if (index < 5 || index > 19) {
-
-      //Place a placeholder element in index 0
-      let placeholder = document.createElement("div");
-      placeholder.classList.add('placeholder');
-      square.appendChild(placeholder);
-
-      //Place a kloak in index 1
-      let kloak = document.createElement("div");
-      kloak.classList.add('kloak');
-      square.appendChild(kloak);
-
-      kloak.addEventListener('click', () => {
-
-        handleKloakClick(square, kloak, index);
-      });
-
+      placeKloak(index);
     }
     // Place pieces with random colors on the middle three rows
     else {
@@ -84,7 +68,7 @@ function initializeKloak() {
 
 let selectedKloak = null;
 
-function handleKloakClick(square, kloak, index) {
+function handleKloakClick(kloak, index) {
 
   //clear the valid moves for the previous selected kloak, and deselect the previous selected kloak
   if (selectedKloak) {
@@ -98,21 +82,20 @@ function handleKloakClick(square, kloak, index) {
 
   showValidMoves(index);
 
+  console.log(gameBoard.children[index]);
+
 }
 
 //Undisplays valid moves
 function clearValidMoves() {
   const validMoves = gameBoard.querySelectorAll('.valid-square');
   validMoves.forEach(validMove => {
-    console.log("clear");
-
     validMove.classList.remove('valid-square');
   });
 }
 
 //Displays valid moves for a kloak from a particular index
 function showValidMoves(index) {
-  console.log(index);
 
   //diagonal up-left
   if (validKloakMove(up(left(index)))) {
@@ -187,7 +170,9 @@ function resetGame() {
 }
 
 //Places a kloak on a square if there is no kloak on that square
-function placeKloak(square) {
+function placeKloak(index) {
+
+  const square = gameBoard.children[index];
   //place a kloak if there is no kloak
   if (square.querySelector(".kloak")) {
     //do nothing
@@ -196,11 +181,24 @@ function placeKloak(square) {
     if (square.querySelector(".piece")) {
       square.children[0].hidden = true;
     }
+    else {
+      //Place a placeholder element in index 0 if there is no colored piece
+      let placeholder = document.createElement("div");
+      placeholder.classList.add('placeholder');
+
+      square.appendChild(placeholder);
+
+    }
 
     //place a kloak in the square
     let kloak = document.createElement("div");
     kloak.classList.add('kloak');
     square.appendChild(kloak);
+
+    kloak.addEventListener('click', () => {
+
+      handleKloakClick(kloak, index);
+    });
   }
 
 };

@@ -24,7 +24,6 @@ squares.forEach((square) => {
 });
 */
 
-
 //Piece properties
 const colorMap = {
   b: "blue",
@@ -42,8 +41,6 @@ function gameStart() {
 }
 
 function initializeKloak() {
-
-
   // Each element represents a color piece to place on the board
   const colorPieces = ["b", "b", "b", "p", "p", "p", "y", "y", "y", "o", "o", "o", "g", "g", "g"];
 
@@ -77,12 +74,8 @@ function handleKloakClick(kloak, index) {
   }
 
   selectedKloak = kloak;
-
   selectedKloak.classList.add('selected-kloak');
-
   showValidMoves(index);
-
-  console.log(gameBoard.children[index]);
 
 }
 
@@ -156,15 +149,18 @@ function validKloakMove(index) {
 
 //Remove all pieces and kloaks on the gameBoard
 function clearBoard() {
-
   for (var index = 0; index < 25; index++) {
-    const parent = gameBoard.children[index];
-    parent.removeChild(parent.firstChild);
+    const square = gameBoard.children[index];
+    // Remove all the child elements of the square
+    while (square.firstChild) {
+      square.removeChild(square.firstChild);
+    }
   }
-
 }
 
+
 function resetGame() {
+  clearValidMoves();
   clearBoard();
   initializeKloak();
 }
@@ -260,6 +256,3 @@ function right(index) {
   }
   return index + 1;
 }
-
-
-

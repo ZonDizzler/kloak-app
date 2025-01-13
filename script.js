@@ -9,6 +9,8 @@ resetBtn.addEventListener("click", resetGame);
 const squares = document.querySelectorAll('.square');
 
 // Add a click event listener to each square
+
+/*
 squares.forEach((square) => {
   square.addEventListener('click', () => {
     if (square.querySelector(".kloak")) {
@@ -19,12 +21,9 @@ squares.forEach((square) => {
       placeKloak(square);
     }
     console.log(square);
-
-
-
-
   });
 });
+*/
 
 
 //Piece properties
@@ -66,6 +65,10 @@ function initializeKloak() {
       kloak.classList.add('kloak');
       square.appendChild(kloak);
 
+      kloak.addEventListener('click', () => {
+        handleKloakClick(square, kloak);
+      });
+
     }
     // Place pieces with random colors on the middle three rows
     else {
@@ -78,6 +81,17 @@ function initializeKloak() {
   }
 
 } //end initializeKloak
+
+let selectedKloak = null;
+function handleKloakClick(square, kloak) {
+
+  if (selectedKloak) {
+    selectedKloak.classList.remove('selected-kloak');
+  }
+  selectedKloak = kloak;
+  selectedKloak.classList.add('selected-kloak');
+
+}
 
 //Remove all pieces and kloaks on the gameBoard
 function clearBoard() {
@@ -135,9 +149,13 @@ function popRandomElement(array) {
 
 /*===========Movement functions==========*/
 
+function validateIndex(index) {
+  return (index > -1 && index < 25);
+}
+
 function down(index) {
   //Can't move down on the bottom row
-  if (index > 19) {
+  if (validateIndex(index) && index > 19) {
     return -1;
   }
 
@@ -145,26 +163,26 @@ function down(index) {
 }
 function up(index) {
   //Can't move up on the top row
-  if (index < 5) {
+  if (validateIndex(index) && index < 5) {
     return -1;
   }
   return index - 5;
 }
 
 function left(index) {
-  //Can't move left on the left row
-  if (index % 5 == 0) {
+  //Can't move left on the leftmost column
+  if (validateIndex(index) && index % 5 == 0) {
     return -1;
   }
-  return
+  return index - 1;
 }
 
-function left(index) {
-  //Can't move left on the left row
-  if ((index + 4) % 5 == 0) {
+function right(index) {
+  //Can't move left on the rightmost column
+  if (validateIndex(index) && index % 5 == 4) {
     return -1;
   }
-  return
+  return index + 1;
 }
 
 

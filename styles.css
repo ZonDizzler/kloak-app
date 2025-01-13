@@ -25,6 +25,10 @@
   background-color: green;
 }
 
+.placeholder {
+  background-color: transparent;
+}
+
 #gameBoard {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

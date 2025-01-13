@@ -14,13 +14,12 @@ const squares = document.querySelectorAll('.square');
 squares.forEach((square) => {
   square.addEventListener('click', () => {
     if (square.querySelector(".kloak")) {
-      console.log('removing kloak');
-      removeKloak(square);
+      //console.log('removing kloak');
+      //removeKloak(square);
     } else {
       console.log('placing kloak');
       placeKloak(square);
     }
-    console.log(square);
   });
 });
 */
@@ -48,7 +47,7 @@ function initializeKloak() {
   // Each element represents a color piece to place on the board
   const colorPieces = ["b", "b", "b", "p", "p", "p", "y", "y", "y", "o", "o", "o", "g", "g", "g"];
 
-  for (var index = 0; index < 25; index++) {
+  for (let index = 0; index < 25; index++) {
     const square = gameBoard.children[index];
 
 
@@ -66,7 +65,8 @@ function initializeKloak() {
       square.appendChild(kloak);
 
       kloak.addEventListener('click', () => {
-        handleKloakClick(square, kloak);
+
+        handleKloakClick(square, kloak, index);
       });
 
     }
@@ -83,14 +83,92 @@ function initializeKloak() {
 } //end initializeKloak
 
 let selectedKloak = null;
-function handleKloakClick(square, kloak) {
 
+function handleKloakClick(square, kloak, index) {
+
+  //clear the valid moves for the previous selected kloak, and deselect the previous selected kloak
   if (selectedKloak) {
+    clearValidMoves();
     selectedKloak.classList.remove('selected-kloak');
   }
+
   selectedKloak = kloak;
+
   selectedKloak.classList.add('selected-kloak');
 
+  showValidMoves(index);
+
+}
+
+//Undisplays valid moves
+function clearValidMoves() {
+  const validMoves = gameBoard.querySelectorAll('.valid-square');
+  validMoves.forEach(validMove => {
+    console.log("clear");
+
+    validMove.classList.remove('valid-square');
+  });
+}
+
+//Displays valid moves for a kloak from a particular index
+function showValidMoves(index) {
+  console.log(index);
+
+  //diagonal up-left
+  if (validKloakMove(up(left(index)))) {
+    gameBoard.children[up(left(index))].classList.add('valid-square');
+  }
+
+  //up
+  if (validKloakMove(up(index))) {
+    gameBoard.children[up(index)].classList.add('valid-square');
+  }
+
+  //diagonal up-right
+  if (validKloakMove(up(right(index)))) {
+    gameBoard.children[up(right(index))].classList.add('valid-square');
+  }
+
+  //right
+  if (validKloakMove(right(index))) {
+    gameBoard.children[right(index)].classList.add('valid-square');
+  }
+
+  //diagonal down-right
+  if (validKloakMove(down(right(index)))) {
+    gameBoard.children[down(right(index))].classList.add('valid-square');
+  }
+
+  //down
+  if (validKloakMove(down(index))) {
+    gameBoard.children[down(index)].classList.add('valid-square');
+  }
+
+  //diagonal down-left
+  if (validKloakMove(down(left(index)))) {
+    gameBoard.children[down(left(index))].classList.add('valid-square');
+  }
+
+  //left
+  if (validKloakMove(left(index))) {
+    gameBoard.children[left(index)].classList.add('valid-square');
+  }
+
+
+
+}
+
+//returns true if the index is a valid kloak move
+function validKloakMove(index) {
+
+  if (validateIndex(index)) {
+    //A move is invalid if a square already contains a kloak
+    if (gameBoard.children[index].querySelector(".kloak")) {
+      return false;
+    }
+    return true;
+  }
+  return false;
 }
 
 //Remove all pieces and kloaks on the gameBoard

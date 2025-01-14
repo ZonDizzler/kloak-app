@@ -1,3 +1,5 @@
+import * as gridUtils from './gridUtils.js';
+
 /*==========Global Variables==========*/
 
 //Components
@@ -89,62 +91,26 @@ function clearValidMoves() {
 
 //Displays valid moves for a kloak from a particular index
 function showValidMoves(index) {
+  const directions = [
+    "up", "down", "left", "right",
+    "upLeft", "upRight", "downLeft", "downRight"
+  ];
 
-  //diagonal up-left
-  if (validKloakMove(up(left(index)))) {
-    gameBoard.children[up(left(index))].classList.add('valid-square');
-  }
-
-  //up
-  if (validKloakMove(up(index))) {
-    gameBoard.children[up(index)].classList.add('valid-square');
-  }
-
-  //diagonal up-right
-  if (validKloakMove(up(right(index)))) {
-    gameBoard.children[up(right(index))].classList.add('valid-square');
-  }
-
-  //right
-  if (validKloakMove(right(index))) {
-    gameBoard.children[right(index)].classList.add('valid-square');
-  }
-
-  //diagonal down-right
-  if (validKloakMove(down(right(index)))) {
-    gameBoard.children[down(right(index))].classList.add('valid-square');
-  }
-
-  //down
-  if (validKloakMove(down(index))) {
-    gameBoard.children[down(index)].classList.add('valid-square');
-  }
-
-  //diagonal down-left
-  if (validKloakMove(down(left(index)))) {
-    gameBoard.children[down(left(index))].classList.add('valid-square');
-  }
-
-  //left
-  if (validKloakMove(left(index))) {
-    gameBoard.children[left(index)].classList.add('valid-square');
-  }
-
-
-
+  directions.forEach(direction => {
+    const nextIndex = gridUtils.getNextIndex(index, direction, 5, 5);
+    if (nextIndex !== null && validKloakMove(nextIndex)) {
+      gameBoard.children[nextIndex].classList.add('valid-square');
+    }
+  });
 }
 
 //returns true if the index is a valid kloak move
 function validKloakMove(index) {
-
-  if (validateIndex(index)) {
-    //A move is invalid if a square already contains a kloak
-    if (gameBoard.children[index].querySelector(".kloak")) {
-      return false;
-    }
-    return true;
+  //A move is invalid if a square already contains a kloak
+  if (gameBoard.children[index].querySelector(".kloak")) {
+    return false;
   }
-  return false;
+  return true;
 }
 
 //Remove all pieces and kloaks on the gameBoard
@@ -157,7 +123,6 @@ function clearBoard() {
     }
   }
 }
-
 
 function resetGame() {
   clearValidMoves();
@@ -181,18 +146,14 @@ function placeKloak(index) {
       //Place a placeholder element in index 0 if there is no colored piece
       let placeholder = document.createElement("div");
       placeholder.classList.add('placeholder');
-
       square.appendChild(placeholder);
-
     }
 
     //place a kloak in the square
     let kloak = document.createElement("div");
     kloak.classList.add('kloak');
     square.appendChild(kloak);
-
     kloak.addEventListener('click', () => {
-
       handleKloakClick(kloak, index);
     });
   }
@@ -201,7 +162,6 @@ function placeKloak(index) {
 
 //Removes a kloak
 function removeKloak(square) {
-
   //Unhides a piece if it is under the kloak
   if (square.children[0].className === 'piece') {
     square.children[0].hidden = false;
@@ -214,45 +174,6 @@ function removeKloak(square) {
 function popRandomElement(array) {
   // Generate a random index
   const randomIndex = Math.floor(Math.random() * array.length);
-
   // Remove and return the element at the random index
   return array.splice(randomIndex, 1)[0];
-}
-
-/*===========Movement functions==========*/
-
-function validateIndex(index) {
-  return (index > -1 && index < 25);
-}
-
-function down(index) {
-  //Can't move down on the bottom row
-  if (validateIndex(index) && index > 19) {
-    return -1;
-  }
-
-  return index + 5;
-}
-function up(index) {
-  //Can't move up on the top row
-  if (validateIndex(index) && index < 5) {
-    return -1;
-  }
-  return index - 5;
-}
-
-function left(index) {
-  //Can't move left on the leftmost column
-  if (validateIndex(index) && index % 5 == 0) {
-    return -1;
-  }
-  return index - 1;
-}
-
-function right(index) {
-  //Can't move left on the rightmost column
-  if (validateIndex(index) && index % 5 == 4) {
-    return -1;
-  }
-  return index + 1;
 }

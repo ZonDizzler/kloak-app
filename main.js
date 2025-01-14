@@ -36,5 +36,4 @@ function gameStart() {
 
 function resetGame() {
   resetBoard(gameBoard);
-
 }

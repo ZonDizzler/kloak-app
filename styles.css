@@ -1,9 +1,10 @@
 .square {
-  width: 80px;
-  height: 80px;
+  width: 10vmin;
+  height: 10vmin;
   border-radius: 50%; /* Make a circle */
-  border: 5px solid;
-  border-color: rgb(192, 148, 90);
+  border: .8vmin solid;
+  padding: 0%;
+  border-color: rgba(192, 148, 90, 0.5);
   background-color: transparent;
 
   display: flex;
@@ -16,8 +17,8 @@
 }
 
 .kloak {
-  width: 60px;
-  height: 60px;
+  width: 90%;
+  height: 90%;
   border-radius: 50%; /* Make a circle */
   background-color: black;
 }
@@ -27,8 +28,8 @@
 }
 
 .piece {
-  width: 40px;
-  height: 40px;
+  width: 40%;
+  height: 40%;
   border-radius: 50%; /* Make a circle */
   background-color: green;
 }
@@ -40,8 +41,8 @@
 #gameBoard {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  padding: 25px;
+  gap: 1vmin;
+  padding: 1vmin;
   box-sizing: border-box; /* Includes padding in the board's dimensions */
   background-image: url(https://upload.wikimedia.org/wikipedia/commons/d/db/Furnier_messerbirke.jpg);
   background-size: cover; /* Scales the image to cover the board */
